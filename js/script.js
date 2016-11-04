@@ -1,55 +1,33 @@
+var twUrl = "https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text=";
+
+var apiUrl = "http://api.forismatic.com/api/1.0/?format=jsonp&method=getQuote&jsonp=?&lang=en";
+
+function getObject (obj) {
+	$("#quote").html(" " + obj.quoteText + " ");
+	if (obj.quoteAuthor !== "") {
+		var author = "- " + obj.quoteAuthor;
+	} else {
+		author = "- Unknown author";
+	}
+	$("#author").html(author);
+	$("#twitter").attr("href", twUrl + '"' + obj.quoteText + '"' + " " + author);
+}
+
+function getQuote () {
+	$.getJSON(apiUrl, getObject);
+}
+
+getQuote ();
+
 $(document).ready(function() {
 
-	var author;
-
-	var twUrl = "https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text=";
-
-  	$("body").css("display","none").fadeIn(2000);
-
-	$.getJSON("http://api.forismatic.com/api/1.0/?format=jsonp&method=getQuote&jsonp=?&lang=en", function(obj) {
-		
-		$("#quote").html(obj.quoteText);
-		
-		if (obj.quoteAuthor !== "") {
-			author = obj.quoteAuthor;
-		} else {
-			author = "Unknown author";
-		}
-
-		$("#author").html(author);
-
-
-		$("#twitter").attr("href", twUrl + '"' + obj.quoteText + '"' + " - " + author);
-
-
-	});
-
+	$("#quote-section, footer").fadeIn(2000);
 
 	$("#get-quote").on("click", function() {
-
-		$("#quote-section").fadeOut("slow", function() {
-
-			$.getJSON("http://api.forismatic.com/api/1.0/?format=jsonp&method=getQuote&jsonp=?&lang=en", function(obj) {
-			
-			$("#quote").html(obj.quoteText);
-			
-			if (obj.quoteAuthor !== "") {
-				author = obj.quoteAuthor;
-			} else {
-				author = "Unknown author";
-			}
-
-			$("#author").html(author);
-
-			$("#twitter").attr("href", twUrl + '"' + obj.quoteText + '"' + " - " + author);
-
-			});
-
-			$("#quote-section").fadeIn("slow");
-
+		$("#quote-section, footer").fadeOut("slow", function() {
+			getQuote ();
+			$("#quote-section, footer").fadeIn("slow");
 		});
-	
 	});
-
 });
 
